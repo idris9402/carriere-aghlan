@@ -1,0 +1,10 @@
+{
+  "name":"CARRIÈRE AGHLAN",
+  "short_name":"AGHLAN",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#f4f7fa",
+  "theme_color":"#0d2940",
+  "lang":"ar",
+  "dir":"rtl"
+}
