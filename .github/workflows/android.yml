@@ -25,7 +25,7 @@ jobs:
 
       - name: Install Capacitor
         run: |
-          npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+          npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 typescript
 
       - name: Create Android project
         run: npx cap add android
