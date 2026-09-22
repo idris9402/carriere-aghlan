@@ -41,6 +41,20 @@ jobs:
           }
           EOF
 
+      -       - name: Prepare Capacitor config
+        run: |
+          rm -f capacitor.config.ts
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "dz.aghlan.carriere",
+            "appName": "CARRIÈRE AGHLAN",
+            "webDir": "public",
+            "server": {
+              "androidScheme": "https"
+            }
+          }
+          EOF
+
       - name: Create Android project
         run: npx cap add android
 
