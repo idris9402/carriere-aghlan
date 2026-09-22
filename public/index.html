@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="/manifest.json">
+  <title>CARRIÈRE AGHLAN</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 22px 18px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 6px 0 0;
+      color: #cbd5e1;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 10px #00000012;
+    }
+
+    .label {
+      color: #64748b;
+      font-size: 14px;
+    }
+
+    .value {
+      font-size: 30px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #0f172a;
+      color: white;
+    }
+
+    .secondary {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    section {
+      margin-top: 18px;
+    }
+
+    .order {
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .badge {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #dcfce7;
+      color: #166534;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        padding: 14px;
+      }
+
+      .order {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🚚 CARRIÈRE AGHLAN</h1>
+  <p>Gestion du transport des matériaux</p>
+</header>
+
+<main>
+
+  <div class="actions">
+    <button class="primary" onclick="alert('Création de commande prête à être connectée.')">
+      + Nouvelle commande
+    </button>
+
+    <button class="secondary" onclick="health()">
+      Vérifier API
+    </button>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="label">Chauffeurs</div>
+      <div class="value">12</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Véhicules</div>
+      <div class="value">8</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Commandes en cours</div>
+      <div class="value">24</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Commandes terminées</div>
+      <div class="value">48</div>
+    </div>
+
+  </div>
+
+  <section class="card">
+    <h2>Commandes récentes</h2>
+
+    <div class="order">
+      <span>CMD-001 — Gravier</span>
+      <span class="badge">En cours</span>
+    </div>
+
+    <div class="order">
+      <span>CMD-002 — Sable</span>
+      <span class="badge">En cours</span>
+    </div>
+
+    <div class="order">
+      <span>CMD-003 — Pierre</span>
+      <span class="badge">Terminée</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Suivi des missions</h2>
+    <p>
+      Tableau de bord responsive prêt pour l'intégration
+      des utilisateurs, chauffeurs, véhicules, commandes,
+      trajets, GPS et rapports.
+    </p>
+  </section>
+
+</main>
+
+<script>
+async function health() {
+  try {
+    const response = await fetch('/api/health');
+    const data = await response.json();
+    alert('API OK — ' + data.app);
+  } catch (error) {
+    alert('API indisponible');
+  }
+}
+</script>
+
+</body>
+</html>
