@@ -24,12 +24,9 @@ jobs:
         run: npm install
 
       - name: Install Capacitor
-        run: |
-          npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 typescript
+        run: npm install --no-save @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7 typescript
 
-      - 
-
-      -       - name: Prepare Capacitor config
+      - name: Prepare Capacitor config
         run: |
           rm -f capacitor.config.ts
           cat > capacitor.config.json <<'EOF'
