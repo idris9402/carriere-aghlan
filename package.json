@@ -1,12 +1,7 @@
 {
-  "name": "carriere-aghlan",
-  "version": "1.0.0",
-  "private": true,
-  "description": "CARRIÈRE AGHLAN - transport and quarry materials management platform",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.21.2"
-  }
+  "name":"carriere-aghlan-mobile",
+  "private":true,
+  "version":"1.0.0",
+  "scripts":{"sync":"cap sync","android":"cap open android"},
+  "dependencies":{"@capacitor/core":"^7.4.3","@capacitor/android":"^7.4.3","@capacitor/cli":"^7.4.3"}
 }

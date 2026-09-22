@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0d2940">
+<link rel="manifest" href="/manifest.json">
+<title>CARRIÈRE AGHLAN</title>
+<style>
+:root{--navy:#0d2940;--blue:#1976d2;--orange:#f28c28;--green:#159b69;--bg:#f4f7fa;--card:#fff;--text:#173042}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,"Noto Sans Arabic",sans-serif;background:var(--bg);color:var(--text)}
+header{background:linear-gradient(120deg,var(--navy),#164e70);color:#fff;padding:22px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{font-size:25px;font-weight:800}.brand span{color:var(--orange)}header small{opacity:.85}
+.container{max-width:1180px;margin:25px auto;padding:0 18px}.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:18px}
+.card{background:var(--card);border-radius:18px;padding:20px;box-shadow:0 8px 25px #0d29401a}.card h2{margin-top:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stat{padding:16px;border-radius:14px;background:#eef6ff}.stat b{font-size:28px;display:block}
+.actions{display:flex;gap:10px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:11px 16px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}.btn.orange{background:var(--orange)}.btn.green{background:var(--green)}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #e8eef2;text-align:right}.badge{padding:5px 9px;border-radius:999px;font-size:12px;background:#eee}.pending{background:#fff2cf}.in_progress{background:#dff2ff}.done{background:#dff8eb}
+input,select{width:100%;padding:11px;border:1px solid #d8e0e7;border-radius:10px;margin:5px 0 10px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}header{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">CARRIÈRE <span>AGHLAN</span></div><small>إدارة نقل وتوزيع مواد المحاجر</small></div><div>المشرف / Admin</div></header>
+<main class="container">
+<section class="card"><h2>لوحة التحكم</h2><div class="stats"><div class="stat"><span>الطلبات</span><b id="ordersCount">—</b></div><div class="stat"><span>قيد التنفيذ</span><b id="activeCount">—</b></div><div class="stat"><span>السائقون المتاحون</span><b id="driversCount">—</b></div></div></section>
+<div class="grid" style="margin-top:18px">
+<section class="card"><h2>إنشاء طلب نقل</h2>
+<label>المادة</label><select id="material"><option>ردم</option><option>حصى</option><option>رمل</option><option>تربة</option><option>مواد بناء</option></select>
+<label>الكمية (م³)</label><input id="quantity" type="number" value="10" min="1">
+<label>موقع التحميل</label><input id="pickup" value="المحجرة">
+<label>موقع التفريغ</label><input id="drop" value="الجزائر">
+<button class="btn orange" onclick="createOrder()">إرسال الطلب</button>
+</section>
+<section class="card"><h2>السائقون</h2><div id="drivers"></div></section>
+</div>
+<section class="card" style="margin-top:18px"><h2>الطلبات</h2><div class="actions"><button class="btn" onclick="loadAll()">تحديث</button></div><div style="overflow:auto"><table><thead><tr><th>الطلب</th><th>المادة</th><th>الكمية</th><th>الحالة</th><th>السائق</th><th>إجراء</th></tr></thead><tbody id="orders"></tbody></table></div></section>
+</main>
+<script>
+const statusAr={pending:'قيد الانتظار',in_progress:'قيد التنفيذ',done:'مكتمل'};
+async function api(url,opt){const r=await fetch(url,opt);if(!r.ok)throw new Error(await r.text());return r.json()}
+async function loadAll(){const [o,d]=await Promise.all([api('/api/orders'),api('/api/drivers')]);
+document.querySelector('#ordersCount').textContent=o.length;document.querySelector('#activeCount').textContent=o.filter(x=>x.status==='in_progress').length;document.querySelector('#driversCount').textContent=d.filter(x=>x.status==='available').length;
+document.querySelector('#drivers').innerHTML=d.map(x=>`<div style="padding:10px;border-bottom:1px solid #eee"><b>${x.name}</b> — ${x.phone}<br><span class="badge ${x.status==='available'?'done':'pending'}">${x.status==='available'?'متاح':'مشغول'}</span></div>`).join('');
+document.querySelector('#orders').innerHTML=o.map(x=>`<tr><td>${x.id}</td><td>${x.material}</td><td>${x.quantity}</td><td><span class="badge ${x.status}">${statusAr[x.status]||x.status}</span></td><td>${x.driverId?('سائق '+x.driverId):'—'}</td><td>${x.status!=='done'?`<button class="btn green" onclick="finish('${x.id}')">إتمام</button>`:''}</td></tr>`).join('');
+}
+async function createOrder(){await api('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({material:material.value,quantity:quantity.value,pickup:pickup.value,drop:drop.value})});loadAll()}
+async function finish(id){await api('/api/orders/'+id+'/status',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status:'done'})});loadAll()}
+loadAll();
+</script>
+</body></html>
